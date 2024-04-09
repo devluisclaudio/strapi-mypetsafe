@@ -1,0 +1,84 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pets",
+  "info": {
+    "singularName": "pet",
+    "pluralName": "pets",
+    "displayName": "Pets",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "raca": {
+      "type": "string",
+      "required": true
+    },
+    "pelagemOrCor": {
+      "type": "string",
+      "required": true
+    },
+    "dateNascimento": {
+      "type": "string",
+      "required": true,
+      "maxLength": 10,
+      "minLength": 10
+    },
+    "sexo": {
+      "type": "string",
+      "required": true
+    },
+    "porte": {
+      "type": "string",
+      "required": true
+    },
+    "castrado": {
+      "type": "string",
+      "required": true,
+      "maxLength": 3
+    },
+    "especy": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::especie.especie",
+      "inversedBy": "pets"
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "pets"
+    },
+    "code": {
+      "type": "customField",
+      "options": {
+        "disable-regenerate": false,
+        "uuid-format": "^[a-zA-Z0-9]{6}$"
+      },
+      "customField": "plugin::strapi-advanced-uuid.uuid"
+    },
+    "tutor_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::tutor.tutor",
+      "inversedBy": "pet"
+    },
+    "cover": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "infoExtra": {
+      "type": "string"
+    }
+  }
+}
