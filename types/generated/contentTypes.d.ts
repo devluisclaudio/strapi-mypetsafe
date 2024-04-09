@@ -590,6 +590,53 @@ export interface PluginContentReleasesReleaseAction
   };
 }
 
+export interface PluginI18NLocale extends Schema.CollectionType {
+  collectionName: 'i18n_locale';
+  info: {
+    singularName: 'locale';
+    pluralName: 'locales';
+    collectionName: 'locales';
+    displayName: 'Locale';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    name: Attribute.String &
+      Attribute.SetMinMax<
+        {
+          min: 1;
+          max: 50;
+        },
+        number
+      >;
+    code: Attribute.String & Attribute.Unique;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'plugin::i18n.locale',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'plugin::i18n.locale',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginUsersPermissionsPermission
   extends Schema.CollectionType {
   collectionName: 'up_permissions';
@@ -724,6 +771,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.role'
     >;
+    pets: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::pet.pet'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -741,14 +793,15 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
-export interface PluginI18NLocale extends Schema.CollectionType {
-  collectionName: 'i18n_locale';
+export interface PluginStrapiStripeSsProduct extends Schema.CollectionType {
+  collectionName: 'strapi-stripe_ss-product';
   info: {
-    singularName: 'locale';
-    pluralName: 'locales';
-    collectionName: 'locales';
-    displayName: 'Locale';
-    description: '';
+    tableName: 'StripeProduct';
+    singularName: 'ss-product';
+    pluralName: 'ss-products';
+    displayName: 'Product';
+    description: 'Stripe Products';
+    kind: 'collectionType';
   };
   options: {
     draftAndPublish: false;
@@ -762,25 +815,408 @@ export interface PluginI18NLocale extends Schema.CollectionType {
     };
   };
   attributes: {
-    name: Attribute.String &
+    title: Attribute.String &
+      Attribute.Required &
       Attribute.SetMinMax<
         {
           min: 1;
-          max: 50;
         },
         number
       >;
-    code: Attribute.String & Attribute.Unique;
+    slug: Attribute.UID<'plugin::strapi-stripe.ss-product', 'title'> &
+      Attribute.Required &
+      Attribute.Unique;
+    description: Attribute.Text &
+      Attribute.Required &
+      Attribute.SetMinMax<
+        {
+          min: 1;
+        },
+        number
+      >;
+    price: Attribute.Decimal & Attribute.Required;
+    currency: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMax<
+        {
+          min: 1;
+        },
+        number
+      >;
+    productImage: Attribute.Media & Attribute.Required;
+    isSubscription: Attribute.Boolean & Attribute.DefaultTo<false>;
+    interval: Attribute.String;
+    trialPeriodDays: Attribute.Integer;
+    stripeProductId: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMax<
+        {
+          min: 3;
+        },
+        number
+      >;
+    stripePriceId: Attribute.String &
+      Attribute.SetMinMax<
+        {
+          min: 3;
+        },
+        number
+      >;
+    stripePlanId: Attribute.String &
+      Attribute.SetMinMax<
+        {
+          min: 3;
+        },
+        number
+      >;
+    stripePayment: Attribute.Relation<
+      'plugin::strapi-stripe.ss-product',
+      'oneToMany',
+      'plugin::strapi-stripe.ss-payment'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
-      'plugin::i18n.locale',
+      'plugin::strapi-stripe.ss-product',
       'oneToOne',
       'admin::user'
     > &
       Attribute.Private;
     updatedBy: Attribute.Relation<
-      'plugin::i18n.locale',
+      'plugin::strapi-stripe.ss-product',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface PluginStrapiStripeSsPayment extends Schema.CollectionType {
+  collectionName: 'strapi-stripe_ss-payment';
+  info: {
+    tableName: 'StripePayment';
+    singularName: 'ss-payment';
+    pluralName: 'ss-payments';
+    displayName: 'Payment';
+    description: 'Stripe Payment';
+    kind: 'collectionType';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    txnDate: Attribute.DateTime & Attribute.Required;
+    transactionId: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        maxLength: 250;
+      }>;
+    isTxnSuccessful: Attribute.Boolean & Attribute.DefaultTo<false>;
+    txnMessage: Attribute.Text &
+      Attribute.SetMinMaxLength<{
+        maxLength: 5000;
+      }>;
+    txnErrorMessage: Attribute.String &
+      Attribute.SetMinMaxLength<{
+        maxLength: 250;
+      }>;
+    txnAmount: Attribute.Decimal & Attribute.Required;
+    customerName: Attribute.String & Attribute.Required;
+    customerEmail: Attribute.String & Attribute.Required;
+    stripeProduct: Attribute.Relation<
+      'plugin::strapi-stripe.ss-payment',
+      'manyToOne',
+      'plugin::strapi-stripe.ss-product'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'plugin::strapi-stripe.ss-payment',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'plugin::strapi-stripe.ss-payment',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiCidadeCidade extends Schema.CollectionType {
+  collectionName: 'cidades';
+  info: {
+    singularName: 'cidade';
+    pluralName: 'cidades';
+    displayName: 'Cidades';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required;
+    estado: Attribute.Relation<
+      'api::cidade.cidade',
+      'manyToOne',
+      'api::estado.estado'
+    >;
+    tutores: Attribute.Relation<
+      'api::cidade.cidade',
+      'oneToMany',
+      'api::tutor.tutor'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::cidade.cidade',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::cidade.cidade',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiEspecieEspecie extends Schema.CollectionType {
+  collectionName: 'especies';
+  info: {
+    singularName: 'especie';
+    pluralName: 'especies';
+    displayName: 'Especies';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required & Attribute.Unique;
+    pets: Attribute.Relation<
+      'api::especie.especie',
+      'oneToMany',
+      'api::pet.pet'
+    >;
+    cover: Attribute.Media;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::especie.especie',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::especie.especie',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiEstadoEstado extends Schema.CollectionType {
+  collectionName: 'estados';
+  info: {
+    singularName: 'estado';
+    pluralName: 'estados';
+    displayName: 'Estados';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required;
+    uf: Attribute.String &
+      Attribute.Required &
+      Attribute.Unique &
+      Attribute.SetMinMaxLength<{
+        maxLength: 2;
+      }>;
+    cidades: Attribute.Relation<
+      'api::estado.estado',
+      'oneToMany',
+      'api::cidade.cidade'
+    >;
+    tutores: Attribute.Relation<
+      'api::estado.estado',
+      'oneToMany',
+      'api::tutor.tutor'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::estado.estado',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::estado.estado',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiPetPet extends Schema.CollectionType {
+  collectionName: 'pets';
+  info: {
+    singularName: 'pet';
+    pluralName: 'pets';
+    displayName: 'Pets';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required;
+    raca: Attribute.String & Attribute.Required;
+    pelagemOrCor: Attribute.String & Attribute.Required;
+    dateNascimento: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 10;
+        maxLength: 10;
+      }>;
+    sexo: Attribute.String & Attribute.Required;
+    porte: Attribute.String & Attribute.Required;
+    castrado: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        maxLength: 3;
+      }>;
+    especy: Attribute.Relation<
+      'api::pet.pet',
+      'manyToOne',
+      'api::especie.especie'
+    >;
+    users_permissions_user: Attribute.Relation<
+      'api::pet.pet',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    code: Attribute.UID<
+      undefined,
+      undefined,
+      {
+        'disable-regenerate': false;
+        'uuid-format': '^[a-zA-Z0-9]{6}$';
+      }
+    > &
+      Attribute.CustomField<
+        'plugin::strapi-advanced-uuid.uuid',
+        {
+          'disable-regenerate': false;
+          'uuid-format': '^[a-zA-Z0-9]{6}$';
+        }
+      >;
+    tutor_id: Attribute.Relation<
+      'api::pet.pet',
+      'oneToOne',
+      'api::tutor.tutor'
+    >;
+    cover: Attribute.Media & Attribute.Required;
+    infoExtra: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::pet.pet', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::pet.pet', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
+export interface ApiPlanoPlano extends Schema.CollectionType {
+  collectionName: 'planos';
+  info: {
+    singularName: 'plano';
+    pluralName: 'planos';
+    displayName: 'Planos';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Attribute.String & Attribute.Required;
+    description: Attribute.String;
+    checked: Attribute.String & Attribute.Required;
+    value: Attribute.Decimal & Attribute.Required & Attribute.DefaultTo<0>;
+    discount: Attribute.Decimal & Attribute.DefaultTo<0>;
+    imagem: Attribute.Media & Attribute.Required;
+    stripeId: Attribute.String & Attribute.Unique;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::plano.plano',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::plano.plano',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiTutorTutor extends Schema.CollectionType {
+  collectionName: 'tutores';
+  info: {
+    singularName: 'tutor';
+    pluralName: 'tutores';
+    displayName: 'Tutores';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    name_1: Attribute.String & Attribute.Required;
+    name_2: Attribute.String;
+    pet: Attribute.Relation<'api::tutor.tutor', 'oneToOne', 'api::pet.pet'>;
+    cidade: Attribute.Relation<
+      'api::tutor.tutor',
+      'manyToOne',
+      'api::cidade.cidade'
+    >;
+    estado: Attribute.Relation<
+      'api::tutor.tutor',
+      'manyToOne',
+      'api::estado.estado'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::tutor.tutor',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::tutor.tutor',
       'oneToOne',
       'admin::user'
     > &
@@ -802,10 +1238,18 @@ declare module '@strapi/types' {
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
+      'plugin::i18n.locale': PluginI18NLocale;
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
-      'plugin::i18n.locale': PluginI18NLocale;
+      'plugin::strapi-stripe.ss-product': PluginStrapiStripeSsProduct;
+      'plugin::strapi-stripe.ss-payment': PluginStrapiStripeSsPayment;
+      'api::cidade.cidade': ApiCidadeCidade;
+      'api::especie.especie': ApiEspecieEspecie;
+      'api::estado.estado': ApiEstadoEstado;
+      'api::pet.pet': ApiPetPet;
+      'api::plano.plano': ApiPlanoPlano;
+      'api::tutor.tutor': ApiTutorTutor;
     }
   }
 }
