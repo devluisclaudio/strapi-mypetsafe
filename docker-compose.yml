@@ -2,7 +2,7 @@ version: '3'
 services:
   db:
     image: mariadb:10
-    container_name: db
+    container_name: db-mypetsafe
     environment:
       MARIADB_ROOT_PASSWORD: root
       MARIADB_DATABASE: mypetsafe
@@ -11,7 +11,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./volumes:/var/lib/mysql
+      - ../volumes:/var/lib/mysql
     networks:
       - mypetsafe
       

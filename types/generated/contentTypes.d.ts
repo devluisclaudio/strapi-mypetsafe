@@ -776,6 +776,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::pet.pet'
     >;
+    ordens: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::ordem.ordem'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1076,6 +1081,46 @@ export interface ApiEstadoEstado extends Schema.CollectionType {
   };
 }
 
+export interface ApiOrdemOrdem extends Schema.CollectionType {
+  collectionName: 'ordens';
+  info: {
+    singularName: 'ordem';
+    pluralName: 'ordens';
+    displayName: 'Ordens';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    paymentStripeId: Attribute.String;
+    PaymentMethodStripeId: Attribute.String;
+    description: Attribute.String;
+    amount: Attribute.BigInteger;
+    status: Attribute.String;
+    credit: Attribute.Boolean;
+    users_permissions_user: Attribute.Relation<
+      'api::ordem.ordem',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::ordem.ordem',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::ordem.ordem',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiPetPet extends Schema.CollectionType {
   collectionName: 'pets';
   info: {
@@ -1247,6 +1292,7 @@ declare module '@strapi/types' {
       'api::cidade.cidade': ApiCidadeCidade;
       'api::especie.especie': ApiEspecieEspecie;
       'api::estado.estado': ApiEstadoEstado;
+      'api::ordem.ordem': ApiOrdemOrdem;
       'api::pet.pet': ApiPetPet;
       'api::plano.plano': ApiPlanoPlano;
       'api::tutor.tutor': ApiTutorTutor;
