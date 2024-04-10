@@ -25,8 +25,8 @@ export default factories.createCoreController('api::pet.pet',
         },
 
         async webhook(ctx) {
-            console.log(ctx)
-            return true;
+            const result = await strapi.service('api::pet.pet').webhook(ctx);
+            return result;
         },
     })
 );

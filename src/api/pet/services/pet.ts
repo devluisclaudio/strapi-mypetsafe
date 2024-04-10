@@ -102,7 +102,7 @@ export default factories.createCoreService('api::pet.pet', ({ strapi }): {} => (
         const { body, files } = ctx.request;
 
         const file = files['cover'];
-        
+
 
         const tutor = await strapi.entityService.create('api::tutor.tutor', {
             data: {
@@ -146,5 +146,45 @@ export default factories.createCoreService('api::pet.pet', ({ strapi }): {} => (
         });
 
         return entry;
+    },
+
+    async webhook(ctx) {
+        const event = ctx.request.body;
+
+        switch (event.type) {
+            case 'charge.succeeded':
+                const body = event.data.object;
+                const user = await strapi.db.query('plugin::users-permissions.user').findOne({ where: { email: body.billing_details.email } })
+                await strapi.entityService.create('api::ordem.ordem', {
+                    data: {
+                        paymentStripeId: body.id,
+                        PaymentMethodStripeId: body.payment_method,
+                        description: body.description,
+                        amount: body.amount,
+                        status: body.status,
+                        credit: 1,
+                        users_permissions_user: user.id
+                    },
+                });
+                break;
+            case 'payment_intent.payment_failed':
+                const body = event.data.object;
+                const user = await strapi.db.query('plugin::users-permissions.user').findOne({ where: { email: body.last_payment_error.payment_method.billing_details.email } })
+                await strapi.entityService.create('api::ordem.ordem', {
+                    data: {
+                        paymentStripeId: body.id,
+                        PaymentMethodStripeId: body.payment_method,
+                        description: body.description,
+                        amount: body.amount,
+                        status: body.status,
+                        credit: 0,
+                        users_permissions_user: user.id
+                    },
+                });
+                break;
+            default:
+        }
+
+        return { received: true }
     }
 }));

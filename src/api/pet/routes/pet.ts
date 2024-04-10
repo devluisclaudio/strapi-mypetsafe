@@ -29,7 +29,7 @@ const myExtraRoutes = [
         handler: 'api::pet.pet.count',
     },
     {
-        method: 'GET',
+        method: 'POST',
         path: '/pets/checkout/webhook',
         handler: 'api::pet.pet.webhook',
     },

@@ -71,6 +71,12 @@
       "relation": "oneToMany",
       "target": "api::pet.pet",
       "mappedBy": "users_permissions_user"
+    },
+    "ordens": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::ordem.ordem",
+      "mappedBy": "users_permissions_user"
     }
   }
 }
