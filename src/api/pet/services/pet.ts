@@ -150,11 +150,12 @@ export default factories.createCoreService('api::pet.pet', ({ strapi }): {} => (
 
     async webhook(ctx) {
         const event = ctx.request.body;
-
+        var body;
+        var user;
         switch (event.type) {
             case 'charge.succeeded':
-                const body = event.data.object;
-                const user = await strapi.db.query('plugin::users-permissions.user').findOne({ where: { email: body.billing_details.email } })
+                body = event.data.object;
+                user = await strapi.db.query('plugin::users-permissions.user').findOne({ where: { email: body.billing_details.email } })
                 await strapi.entityService.create('api::ordem.ordem', {
                     data: {
                         paymentStripeId: body.id,
@@ -168,8 +169,8 @@ export default factories.createCoreService('api::pet.pet', ({ strapi }): {} => (
                 });
                 break;
             case 'payment_intent.payment_failed':
-                const body = event.data.object;
-                const user = await strapi.db.query('plugin::users-permissions.user').findOne({ where: { email: body.last_payment_error.payment_method.billing_details.email } })
+                body = event.data.object;
+                user = await strapi.db.query('plugin::users-permissions.user').findOne({ where: { email: body.last_payment_error.payment_method.billing_details.email } })
                 await strapi.entityService.create('api::ordem.ordem', {
                     data: {
                         paymentStripeId: body.id,
