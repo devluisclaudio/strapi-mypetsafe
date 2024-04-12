@@ -1,0 +1,37 @@
+{
+    "kind": "collectionType",
+    "collectionName": "estados",
+    "info": {
+        "singularName": "estado",
+        "pluralName": "estados",
+        "displayName": "Estados"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "name": {
+            "type": "string",
+            "required": true
+        },
+        "uf": {
+            "type": "string",
+            "required": true,
+            "maxLength": 2,
+            "unique": true
+        },
+        "cidades": {
+            "type": "relation",
+            "relation": "oneToMany",
+            "target": "api::cidade.cidade",
+            "mappedBy": "estado"
+        },
+        "tutores": {
+            "type": "relation",
+            "relation": "oneToMany",
+            "target": "api::tutor.tutor",
+            "mappedBy": "estado"
+        }
+    }
+}

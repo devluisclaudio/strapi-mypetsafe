@@ -1,0 +1,41 @@
+{
+    "kind": "collectionType",
+    "collectionName": "tutores",
+    "info": {
+        "singularName": "tutor",
+        "pluralName": "tutores",
+        "displayName": "Tutores",
+        "description": ""
+    },
+    "options": {
+        "draftAndPublish": false
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "name_1": {
+            "type": "string",
+            "required": true
+        },
+        "name_2": {
+            "type": "string"
+        },
+        "pet": {
+            "type": "relation",
+            "relation": "oneToOne",
+            "target": "api::pet.pet",
+            "mappedBy": "tutor_id"
+        },
+        "cidade": {
+            "type": "relation",
+            "relation": "manyToOne",
+            "target": "api::cidade.cidade",
+            "inversedBy": "tutores"
+        },
+        "estado": {
+            "type": "relation",
+            "relation": "manyToOne",
+            "target": "api::estado.estado",
+            "inversedBy": "tutores"
+        }
+    }
+}

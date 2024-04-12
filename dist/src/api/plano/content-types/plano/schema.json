@@ -1,0 +1,50 @@
+{
+    "kind": "collectionType",
+    "collectionName": "planos",
+    "info": {
+        "singularName": "plano",
+        "pluralName": "planos",
+        "displayName": "Planos",
+        "description": ""
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "title": {
+            "type": "string",
+            "required": true
+        },
+        "description": {
+            "type": "string",
+            "required": false
+        },
+        "checked": {
+            "type": "string",
+            "required": true
+        },
+        "value": {
+            "type": "decimal",
+            "required": true,
+            "default": 0
+        },
+        "discount": {
+            "type": "decimal",
+            "default": 0,
+            "required": false
+        },
+        "imagem": {
+            "type": "media",
+            "multiple": false,
+            "required": true,
+            "allowedTypes": [
+                "images"
+            ]
+        },
+        "stripeId": {
+            "type": "string",
+            "unique": true
+        }
+    }
+}
