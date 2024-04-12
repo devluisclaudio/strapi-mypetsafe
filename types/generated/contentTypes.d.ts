@@ -1087,9 +1087,10 @@ export interface ApiOrdemOrdem extends Schema.CollectionType {
     singularName: 'ordem';
     pluralName: 'ordens';
     displayName: 'Ordens';
+    description: '';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     paymentStripeId: Attribute.String;
@@ -1105,7 +1106,6 @@ export interface ApiOrdemOrdem extends Schema.CollectionType {
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::ordem.ordem',
       'oneToOne',

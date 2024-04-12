@@ -4,10 +4,11 @@
   "info": {
     "singularName": "ordem",
     "pluralName": "ordens",
-    "displayName": "Ordens"
+    "displayName": "Ordens",
+    "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
