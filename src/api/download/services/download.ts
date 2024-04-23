@@ -42,7 +42,6 @@ export default factories.createCoreService('api::download.download',
             return donload
         },
         async findOne(ctx) {
-            const user = ctx.state.user;
             const download = await strapi.entityService.findMany('api::download.download', {
                 populate: {
                     users_permissions_user: {
@@ -61,12 +60,16 @@ export default factories.createCoreService('api::download.download',
                             code: ctx.params.id,
                         }
                     },
-                    cover: true
+                    cover:  {
+                        fields: [
+                            'id',
+                            'name',
+                            'url'
+                            ]
+                    }
                 }
             })
-            const url = 'https://n8n.mypetsafe.com.br/webhook-test/5904f14b-1796-43eb-8286-7519465a57c1'
-            const result = await axios.post(url, download)
-            return result
+            return download
         }
     })
 );

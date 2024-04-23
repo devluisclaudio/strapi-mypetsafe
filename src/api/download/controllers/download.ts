@@ -12,9 +12,7 @@ export default factories.createCoreController('api::download.download',
         },
         async findOne(ctx) {
             const result = await strapi.service('api::download.download').findOne(ctx);
-            ctx.response.type = "application/pdf"
-            ctx.response.set('Content-Disposition', 'attachment; filename=download.pdf')
-            return result.data ;
+            return result;
         }
     })
 );
