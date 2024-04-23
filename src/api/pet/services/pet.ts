@@ -211,7 +211,7 @@ export default factories.createCoreService('api::pet.pet', ({ strapi }): {} => (
 
         if (entry.length > 0) {
 
-          
+
 
             const pet = await strapi.entityService.findMany(
                 'api::pet.pet',
@@ -273,10 +273,12 @@ export default factories.createCoreService('api::pet.pet', ({ strapi }): {} => (
                 data: { credit: false }
             })
 
-            return download.id
+            if (download.id)
+                return { sucess: true, message: "Documentos gerados com sucesso!" };
+
+            return { sucess: false, message: "Falha ao gerar documentos!" };
         } else {
             return { sucess: false, message: "Créditos insuficiente!" };
         }
-
     }
 }));
