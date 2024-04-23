@@ -209,6 +209,8 @@ export default factories.createCoreService('api::pet.pet', ({ strapi }): {} => (
 
         if (entry.length > 0) {
 
+            strapi.entityService.delete('api::ordem.ordem', entry[0].id)
+
             const pet = await strapi.entityService.findMany(
                 'api::pet.pet',
                 {
