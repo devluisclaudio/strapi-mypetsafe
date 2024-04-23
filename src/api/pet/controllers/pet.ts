@@ -28,5 +28,10 @@ export default factories.createCoreController('api::pet.pet',
             const result = await strapi.service('api::pet.pet').webhook(ctx);
             return result;
         },
+
+        async geradocs(ctx) {
+            const result = await strapi.service('api::pet.pet').geradocs(ctx);
+            return result;
+        },
     })
 );

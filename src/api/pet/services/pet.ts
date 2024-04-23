@@ -3,6 +3,9 @@
  */
 
 import { factories } from '@strapi/strapi';
+import axios from "axios"
+import uploadToLibrary from "../../../helpers/uploadStreamFile"
+
 
 export default factories.createCoreService('api::pet.pet', ({ strapi }): {} => ({
     async find(ctx) {
@@ -187,5 +190,85 @@ export default factories.createCoreService('api::pet.pet', ({ strapi }): {} => (
         }
 
         return { received: true }
+    },
+
+    async geradocs(ctx) {
+        const user = ctx.state.user;
+        const { body } = ctx.request;
+
+        const entry = await strapi.entityService.findMany('api::ordem.ordem', {
+            filters: {
+                users_permissions_user: user.id,
+                credit: true,
+                description: {
+                    $contains: body.type
+                }
+
+            },
+        });
+
+        if (entry.length > 0) {
+
+            const pet = await strapi.entityService.findMany(
+                'api::pet.pet',
+                {
+                    filters: {
+                        id: body.petId,
+                        users_permissions_user: user.id,
+                    },
+                    populate: {
+                        especy: {
+                            fields: [
+                                'id',
+                                'name',
+                            ]
+
+                        },
+                        users_permissions_user: {
+                            fields: [
+                                'id',
+                                'username',
+                                'email']
+
+                        },
+                        tutor_id: {
+                            fields: [
+                                'id',
+                                'name_1',
+                                'name_2'],
+                            populate: {
+                                cidade: true,
+                                estado: true
+                            }
+                        },
+                        cover: true
+                    }
+                }
+            );
+
+            const url = 'https://n8n.mypetsafe.com.br/webhook-test/96a631c4-6d4c-4f97-9d61-d5c9b3cbc039'
+            const result = await axios.post(url, pet,
+                {
+                    responseType: "stream"
+                })
+
+            const info = {
+                name: body.type + '-' + body.petId + '.jpg'
+            }
+
+            const download = await strapi.entityService.create('api::download.download', {
+                data: {
+                    users_permissions_user: user.id,
+                    pet: body.petId,
+                    type: body.type,
+                    cover: await uploadToLibrary(info, result)
+                }
+            })
+
+            return download.id
+        } else {
+            return { sucess: false, message: "Créditos insuficiente!" };
+        }
+
     }
 }));

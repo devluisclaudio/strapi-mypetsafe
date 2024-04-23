@@ -79,6 +79,12 @@
     },
     "infoExtra": {
       "type": "string"
+    },
+    "downloads": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::download.download",
+      "mappedBy": "pet"
     }
   }
 }
