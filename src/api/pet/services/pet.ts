@@ -207,9 +207,13 @@ export default factories.createCoreService('api::pet.pet', ({ strapi }): {} => (
             },
         });
 
+
+
         if (entry.length > 0) {
 
-            strapi.entityService.delete('api::ordem.ordem', entry[0].id)
+            strapi.entityService.update('api::ordem.ordem', entry[0].id, {
+                data: { credit: false }
+            })
 
             const pet = await strapi.entityService.findMany(
                 'api::pet.pet',
@@ -248,7 +252,7 @@ export default factories.createCoreService('api::pet.pet', ({ strapi }): {} => (
                 }
             );
 
-            const url = 'https://n8n.mypetsafe.com.br/webhook-test/96a631c4-6d4c-4f97-9d61-d5c9b3cbc039'
+            const url = 'https://n8n.mypetsafe.com.br/webhook/96a631c4-6d4c-4f97-9d61-d5c9b3cbc039'
             const result = await axios.post(url, pet,
                 {
                     responseType: "stream"
