@@ -781,6 +781,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::ordem.ordem'
     >;
+    downloads: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::download.download'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -999,6 +1004,46 @@ export interface ApiCidadeCidade extends Schema.CollectionType {
   };
 }
 
+export interface ApiDownloadDownload extends Schema.CollectionType {
+  collectionName: 'downloads';
+  info: {
+    singularName: 'download';
+    pluralName: 'downloads';
+    displayName: 'Downloads';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    users_permissions_user: Attribute.Relation<
+      'api::download.download',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    pet: Attribute.Relation<
+      'api::download.download',
+      'manyToOne',
+      'api::pet.pet'
+    >;
+    cover: Attribute.Media;
+    type: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::download.download',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::download.download',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiEspecieEspecie extends Schema.CollectionType {
   collectionName: 'especies';
   info: {
@@ -1181,6 +1226,11 @@ export interface ApiPetPet extends Schema.CollectionType {
     >;
     cover: Attribute.Media & Attribute.Required;
     infoExtra: Attribute.String;
+    downloads: Attribute.Relation<
+      'api::pet.pet',
+      'oneToMany',
+      'api::download.download'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<'api::pet.pet', 'oneToOne', 'admin::user'> &
@@ -1290,6 +1340,7 @@ declare module '@strapi/types' {
       'plugin::strapi-stripe.ss-product': PluginStrapiStripeSsProduct;
       'plugin::strapi-stripe.ss-payment': PluginStrapiStripeSsPayment;
       'api::cidade.cidade': ApiCidadeCidade;
+      'api::download.download': ApiDownloadDownload;
       'api::especie.especie': ApiEspecieEspecie;
       'api::estado.estado': ApiEstadoEstado;
       'api::ordem.ordem': ApiOrdemOrdem;
