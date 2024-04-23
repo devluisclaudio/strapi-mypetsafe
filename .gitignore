@@ -109,6 +109,7 @@ coverage
 license.txt
 exports
 # .strapi
-# build
+build
+dist
 # .strapi-updater.json
 volumes/*
