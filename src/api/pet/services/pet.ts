@@ -211,7 +211,7 @@ export default factories.createCoreService('api::pet.pet', ({ strapi }): {} => (
 
         if (entry.length > 0) {
 
-            strapi.entityService.update('api::ordem.ordem', entry[0].id, {
+           await strapi.entityService.update('api::ordem.ordem', entry[0].id, {
                 data: { credit: false }
             })
 
