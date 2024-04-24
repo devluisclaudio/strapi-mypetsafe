@@ -38,6 +38,11 @@ const myExtraRoutes = [
         path: '/pets/me/geradocs',
         handler: 'api::pet.pet.geradocs',
     },
+    {
+        method: 'POST',
+        path: '/pets/me/getCodePet',
+        handler: 'api::pet.pet.getCodePet',
+    },
 ];
 
 const allRoutes = customRouter(defaultRouter, myExtraRoutes)

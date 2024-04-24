@@ -280,5 +280,47 @@ export default factories.createCoreService('api::pet.pet', ({ strapi }): {} => (
         } else {
             return { sucess: false, message: "Créditos insuficiente!" };
         }
+    },
+    async getCodePet(ctx) {
+        const pet = await strapi.entityService.findMany(
+            'api::pet.pet',
+            {
+                filters: {
+                    code: ctx.params.id,
+                },
+                populate: {
+                    especy: {
+                        fields: [
+                            'id',
+                            'name',
+                        ]
+
+                    },
+                    users_permissions_user: {
+                        fields: [
+                            'id',
+                            'username',
+                            'email']
+
+                    },
+                    tutor_id: {
+                        fields: [
+                            'id',
+                            'name_1',
+                            'name_2']
+
+                    },
+                    cover: {
+                        fields: [
+                            "id",
+                            'url'
+                        ]
+                    }
+                }
+            }
+        );
+
+
+        return pet;
     }
 }));

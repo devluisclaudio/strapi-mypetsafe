@@ -33,5 +33,9 @@ export default factories.createCoreController('api::pet.pet',
             const result = await strapi.service('api::pet.pet').geradocs(ctx);
             return result;
         },
+        async getCodePet(ctx) {
+            const result = await strapi.service('api::pet.pet').getCodePet(ctx);
+            return result;
+        }
     })
 );
