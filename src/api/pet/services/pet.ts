@@ -282,11 +282,12 @@ export default factories.createCoreService('api::pet.pet', ({ strapi }): {} => (
         }
     },
     async getCodePet(ctx) {
+        const { body } = ctx.request;
         const pet = await strapi.entityService.findMany(
             'api::pet.pet',
             {
                 filters: {
-                    code: ctx.params.id,
+                    code: body.code,
                 },
                 populate: {
                     especy: {
