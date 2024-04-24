@@ -1302,6 +1302,7 @@ export interface ApiTutorTutor extends Schema.CollectionType {
       'manyToOne',
       'api::estado.estado'
     >;
+    phone: Attribute.String & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<

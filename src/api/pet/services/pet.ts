@@ -112,7 +112,8 @@ export default factories.createCoreService('api::pet.pet', ({ strapi }): {} => (
                 name_1: body.name_1,
                 name_2: body.name_2,
                 estado: body.uf,
-                cidade: body.cidade
+                cidade: body.cidade,
+                phone: body.phone
             }
         });
 
@@ -295,7 +296,6 @@ export default factories.createCoreService('api::pet.pet', ({ strapi }): {} => (
                             'id',
                             'name',
                         ]
-
                     },
                     users_permissions_user: {
                         fields: [
@@ -308,8 +308,21 @@ export default factories.createCoreService('api::pet.pet', ({ strapi }): {} => (
                         fields: [
                             'id',
                             'name_1',
-                            'name_2']
-
+                            'name_2',
+                            'phone'
+                        ],
+                        populate: {
+                            estado: {
+                                fields: [
+                                    'id', 'name', 'uf'
+                                ]
+                            },
+                            cidade: {
+                                fields: [
+                                    'id', 'name'
+                                ]
+                            },
+                        }
                     },
                     cover: {
                         fields: [

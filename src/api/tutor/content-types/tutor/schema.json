@@ -36,6 +36,10 @@
       "relation": "manyToOne",
       "target": "api::estado.estado",
       "inversedBy": "tutores"
+    },
+    "phone": {
+      "type": "string",
+      "required": true
     }
   }
 }
