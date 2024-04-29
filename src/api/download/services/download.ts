@@ -43,6 +43,9 @@ export default factories.createCoreService('api::download.download',
         },
         async findOne(ctx) {
             const download = await strapi.entityService.findMany('api::download.download', {
+                filters: {
+                    id: ctx.query.id
+                },
                 populate: {
                     users_permissions_user: {
                         fields: [
