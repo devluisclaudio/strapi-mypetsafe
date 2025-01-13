@@ -1231,6 +1231,8 @@ export interface ApiPetPet extends Schema.CollectionType {
       'oneToMany',
       'api::download.download'
     >;
+    pataPet: Attribute.String & Attribute.DefaultTo<'Cachorro'>;
+    corRg: Attribute.String & Attribute.DefaultTo<'Verde'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<'api::pet.pet', 'oneToOne', 'admin::user'> &

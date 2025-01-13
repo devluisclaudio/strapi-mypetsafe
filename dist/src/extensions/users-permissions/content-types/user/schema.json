@@ -77,6 +77,12 @@
             "relation": "oneToMany",
             "target": "api::ordem.ordem",
             "mappedBy": "users_permissions_user"
+        },
+        "downloads": {
+            "type": "relation",
+            "relation": "oneToMany",
+            "target": "api::download.download",
+            "mappedBy": "users_permissions_user"
         }
     }
 }

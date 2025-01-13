@@ -123,6 +123,8 @@ export default factories.createCoreService('api::pet.pet', ({ strapi }): {} => (
                 name: body.name,
                 especy: body.especy,
                 raca: body.raca,
+                corRg: body.corRg,
+                pataPet: body.pataPet,
                 pelagemOrCor: body.pelagemCor,
                 dateNascimento: body.nascimento,
                 sexo: body.sexo,

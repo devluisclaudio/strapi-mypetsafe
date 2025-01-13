@@ -30,6 +30,16 @@ const myExtraRoutes = [
         path: '/pets/checkout/webhook',
         handler: 'api::pet.pet.webhook',
     },
+    {
+        method: 'POST',
+        path: '/pets/me/geradocs',
+        handler: 'api::pet.pet.geradocs',
+    },
+    {
+        method: 'POST',
+        path: '/pets/me/getCodePet',
+        handler: 'api::pet.pet.getCodePet',
+    },
 ];
 const allRoutes = customRouter(defaultRouter, myExtraRoutes);
 exports.default = allRoutes;

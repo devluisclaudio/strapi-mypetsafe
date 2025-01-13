@@ -79,6 +79,20 @@
         },
         "infoExtra": {
             "type": "string"
+        },
+        "downloads": {
+            "type": "relation",
+            "relation": "oneToMany",
+            "target": "api::download.download",
+            "mappedBy": "pet"
+        },
+        "pataPet": {
+            "type": "string",
+            "default": "Cachorro"
+        },
+        "corRg": {
+            "type": "string",
+            "default": "Verde"
         }
     }
 }
