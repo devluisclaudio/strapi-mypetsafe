@@ -344,7 +344,7 @@ export default factories.createCoreService('api::pet.pet', ({ strapi }): {} => (
 function urlSwitch(type: string) : string {
     switch (type) {
         case 'certidao': return 'https://n8n.mypetsafe.com.br/webhook/96a631c4-6d4c-4f97-9d61-d5c9b3cbc039'; break;
-        case 'rg': return 'https://n8n.mypetsafe.com.br/webhook/34ae03c1-d74c-45ac-8bf8-ba6c42b7a637'; break;
+        case 'rg': return 'https://n8n.mypetsafe.com.br/webhook-test/34ae03c1-d74c-45ac-8bf8-ba6c42b7a637'; break;
         case 'tag': return 'https://n8n.mypetsafe.com.br/webhook/b4699096-6211-423e-b5fe-40262d76e05f'; break;
         default: return 'https://n8n.mypetsafe.com.br/webhook/96a631c4-6d4c-4f97-9d61-d5c9b3cbc039'; break;
     }
