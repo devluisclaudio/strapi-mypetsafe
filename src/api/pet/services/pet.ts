@@ -207,7 +207,7 @@ export default factories.createCoreService(
 
         let download = null
 
-        if (body.type !== "alldocs") {
+        if (body.type !== "kit") {
           const url = urlSwitch(body.type);
           const result = await axios.post(url, pet, {
             responseType: "stream",

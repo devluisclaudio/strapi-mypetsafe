@@ -191,7 +191,7 @@ exports.default = strapi_1.factories.createCoreService("api::pet.pet", ({ strapi
                 },
             });
             let download = null;
-            if (body.type !== "alldocs") {
+            if (body.type !== "kit") {
                 const url = urlSwitch(body.type);
                 const result = await axios_1.default.post(url, pet, {
                     responseType: "stream",
