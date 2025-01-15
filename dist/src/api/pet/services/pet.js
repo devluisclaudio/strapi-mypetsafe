@@ -9,75 +9,53 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const strapi_1 = require("@strapi/strapi");
 const axios_1 = __importDefault(require("axios"));
 const uploadStreamFile_1 = __importDefault(require("../../../helpers/uploadStreamFile"));
-exports.default = strapi_1.factories.createCoreService('api::pet.pet', ({ strapi }) => ({
+exports.default = strapi_1.factories.createCoreService("api::pet.pet", ({ strapi }) => ({
     async find(ctx) {
         const user = ctx.state.user;
-        const pets = await strapi.entityService.findMany('api::pet.pet', {
+        const pets = await strapi.entityService.findMany("api::pet.pet", {
             filters: {
                 users_permissions_user: user.id,
             },
             populate: {
                 especy: {
-                    fields: [
-                        'id',
-                        'name',
-                    ]
+                    fields: ["id", "name"],
                 },
                 users_permissions_user: {
-                    fields: [
-                        'id',
-                        'username',
-                        'email'
-                    ]
+                    fields: ["id", "username", "email"],
                 },
                 tutor_id: {
-                    fields: [
-                        'id',
-                        'name_1',
-                        'name_2'
-                    ]
+                    fields: ["id", "name_1", "name_2"],
                 },
-                cover: true
-            }
+                cover: true,
+            },
         });
         return pets;
     },
     async findOne(ctx) {
         const user = ctx.state.user;
-        const pet = await strapi.entityService.findMany('api::pet.pet', {
+        const pet = await strapi.entityService.findMany("api::pet.pet", {
             filters: {
                 id: ctx.params.id,
                 users_permissions_user: user.id,
             },
             populate: {
                 especy: {
-                    fields: [
-                        'id',
-                        'name',
-                    ]
+                    fields: ["id", "name"],
                 },
                 users_permissions_user: {
-                    fields: [
-                        'id',
-                        'username',
-                        'email'
-                    ]
+                    fields: ["id", "username", "email"],
                 },
                 tutor_id: {
-                    fields: [
-                        'id',
-                        'name_1',
-                        'name_2'
-                    ]
+                    fields: ["id", "name_1", "name_2"],
                 },
-                cover: true
-            }
+                cover: true,
+            },
         });
         return pet;
     },
     async count(ctx) {
         const user = ctx.state.user;
-        const pets = await strapi.entityService.findMany('api::pet.pet', {
+        const pets = await strapi.entityService.findMany("api::pet.pet", {
             filters: {
                 users_permissions_user: user.id,
             },
@@ -87,17 +65,17 @@ exports.default = strapi_1.factories.createCoreService('api::pet.pet', ({ strapi
     async create(ctx) {
         const user = ctx.state.user;
         const { body, files } = ctx.request;
-        const file = files['cover'];
-        const tutor = await strapi.entityService.create('api::tutor.tutor', {
+        const file = files["cover"];
+        const tutor = await strapi.entityService.create("api::tutor.tutor", {
             data: {
                 name_1: body.name_1,
                 name_2: body.name_2,
                 estado: body.uf,
                 cidade: body.cidade,
-                phone: body.phone
-            }
+                phone: body.phone,
+            },
         });
-        const entry = await strapi.entityService.create('api::pet.pet', {
+        const entry = await strapi.entityService.create("api::pet.pet", {
             data: {
                 name: body.name,
                 especy: body.especy,
@@ -112,7 +90,7 @@ exports.default = strapi_1.factories.createCoreService('api::pet.pet', ({ strapi
                 infoExtra: body.infoExtra,
                 users_permissions_user: user.id,
                 tutor_id: tutor.id,
-                cover: null
+                cover: null,
             },
         });
         const createdFiles = await strapi.plugins.upload.services.upload.upload({
@@ -123,7 +101,7 @@ exports.default = strapi_1.factories.createCoreService('api::pet.pet', ({ strapi
                 fileInfo: {
                     name: body.name,
                     caption: "Caption",
-                    alternativeText: body.name + '-' + body.raca,
+                    alternativeText: body.name + "-" + body.raca,
                 },
             },
             files: file,
@@ -135,10 +113,12 @@ exports.default = strapi_1.factories.createCoreService('api::pet.pet', ({ strapi
         var body;
         var user;
         switch (event.type) {
-            case 'charge.succeeded':
+            case "charge.succeeded":
                 body = event.data.object;
-                user = await strapi.db.query('plugin::users-permissions.user').findOne({ where: { email: body.billing_details.email } });
-                await strapi.entityService.create('api::ordem.ordem', {
+                user = await strapi.db
+                    .query("plugin::users-permissions.user")
+                    .findOne({ where: { email: body.billing_details.email } });
+                await strapi.entityService.create("api::ordem.ordem", {
                     data: {
                         paymentStripeId: body.id,
                         PaymentMethodStripeId: body.payment_method,
@@ -146,14 +126,20 @@ exports.default = strapi_1.factories.createCoreService('api::pet.pet', ({ strapi
                         amount: body.amount,
                         status: body.status,
                         credit: 1,
-                        users_permissions_user: user.id
+                        users_permissions_user: user.id,
                     },
                 });
                 break;
-            case 'payment_intent.payment_failed':
+            case "payment_intent.payment_failed":
                 body = event.data.object;
-                user = await strapi.db.query('plugin::users-permissions.user').findOne({ where: { email: body.last_payment_error.payment_method.billing_details.email } });
-                await strapi.entityService.create('api::ordem.ordem', {
+                user = await strapi.db
+                    .query("plugin::users-permissions.user")
+                    .findOne({
+                    where: {
+                        email: body.last_payment_error.payment_method.billing_details.email,
+                    },
+                });
+                await strapi.entityService.create("api::ordem.ordem", {
                     data: {
                         paymentStripeId: body.id,
                         PaymentMethodStripeId: body.payment_method,
@@ -161,7 +147,7 @@ exports.default = strapi_1.factories.createCoreService('api::pet.pet', ({ strapi
                         amount: body.amount,
                         status: body.status,
                         credit: 0,
-                        users_permissions_user: user.id
+                        users_permissions_user: user.id,
                     },
                 });
                 break;
@@ -172,66 +158,77 @@ exports.default = strapi_1.factories.createCoreService('api::pet.pet', ({ strapi
     async geradocs(ctx) {
         const user = ctx.state.user;
         const { body } = ctx.request;
-        const entry = await strapi.entityService.findMany('api::ordem.ordem', {
+        const entry = await strapi.entityService.findMany("api::ordem.ordem", {
             filters: {
                 users_permissions_user: user.id,
                 credit: true,
                 description: {
-                    $contains: body.type
-                }
+                    $contains: body.type,
+                },
             },
         });
         if (entry.length > 0) {
-            const pet = await strapi.entityService.findMany('api::pet.pet', {
+            const pet = await strapi.entityService.findMany("api::pet.pet", {
                 filters: {
                     id: body.petId,
                     users_permissions_user: user.id,
                 },
                 populate: {
                     especy: {
-                        fields: [
-                            'id',
-                            'name',
-                        ]
+                        fields: ["id", "name"],
                     },
                     users_permissions_user: {
-                        fields: [
-                            'id',
-                            'username',
-                            'email'
-                        ]
+                        fields: ["id", "username", "email"],
                     },
                     tutor_id: {
-                        fields: [
-                            'id',
-                            'name_1',
-                            'name_2'
-                        ],
+                        fields: ["id", "name_1", "name_2"],
                         populate: {
                             cidade: true,
-                            estado: true
-                        }
+                            estado: true,
+                        },
                     },
-                    cover: true
-                }
+                    cover: true,
+                },
             });
-            const url = urlSwitch(body.type);
-            const result = await axios_1.default.post(url, pet, {
-                responseType: "stream"
-            });
-            const info = {
-                name: body.type + '-' + body.petId + '.png'
-            };
-            const download = await strapi.entityService.create('api::download.download', {
-                data: {
-                    users_permissions_user: user.id,
-                    pet: body.petId,
-                    type: body.type,
-                    cover: await (0, uploadStreamFile_1.default)(info, result)
-                }
-            });
-            await strapi.entityService.update('api::ordem.ordem', entry[0].id, {
-                data: { credit: false }
+            let download = null;
+            if (body.type !== "alldocs") {
+                const url = urlSwitch(body.type);
+                const result = await axios_1.default.post(url, pet, {
+                    responseType: "stream",
+                });
+                const info = {
+                    name: body.type + "-" + body.petId + ".png",
+                };
+                download = await strapi.entityService.create("api::download.download", {
+                    data: {
+                        users_permissions_user: user.id,
+                        pet: body.petId,
+                        type: body.type,
+                        cover: await (0, uploadStreamFile_1.default)(info, result),
+                    },
+                });
+            }
+            else {
+                ["rg", "certidao", "tag"].map(async (item) => {
+                    const url = urlSwitch(item);
+                    const result = await axios_1.default.post(url, pet, {
+                        responseType: "stream",
+                    });
+                    const info = {
+                        name: item + "-" + body.petId + ".png",
+                    };
+                    download = await strapi.entityService.create("api::download.download", {
+                        data: {
+                            users_permissions_user: user.id,
+                            pet: body.petId,
+                            type: item,
+                            cover: await (0, uploadStreamFile_1.default)(info, result),
+                        },
+                    });
+                });
+            }
+            await strapi.entityService.update("api::ordem.ordem", entry[0].id, {
+                data: { credit: false },
             });
             if (download.id)
                 return { sucess: true, message: "Documentos gerados com sucesso!" };
@@ -243,68 +240,49 @@ exports.default = strapi_1.factories.createCoreService('api::pet.pet', ({ strapi
     },
     async getCodePet(ctx) {
         const { body } = ctx.request;
-        const pet = await strapi.entityService.findMany('api::pet.pet', {
+        const pet = await strapi.entityService.findMany("api::pet.pet", {
             filters: {
                 code: body.code,
             },
             populate: {
                 especy: {
-                    fields: [
-                        'id',
-                        'name',
-                    ]
+                    fields: ["id", "name"],
                 },
                 users_permissions_user: {
-                    fields: [
-                        'id',
-                        'username',
-                        'email'
-                    ]
+                    fields: ["id", "username", "email"],
                 },
                 tutor_id: {
-                    fields: [
-                        'id',
-                        'name_1',
-                        'name_2',
-                        'phone'
-                    ],
+                    fields: ["id", "name_1", "name_2", "phone"],
                     populate: {
                         estado: {
-                            fields: [
-                                'id', 'name', 'uf'
-                            ]
+                            fields: ["id", "name", "uf"],
                         },
                         cidade: {
-                            fields: [
-                                'id', 'name'
-                            ]
+                            fields: ["id", "name"],
                         },
-                    }
+                    },
                 },
                 cover: {
-                    fields: [
-                        "id",
-                        'url'
-                    ]
-                }
-            }
+                    fields: ["id", "url"],
+                },
+            },
         });
         return pet;
-    }
+    },
 }));
 function urlSwitch(type) {
     switch (type) {
-        case 'certidao':
-            return 'https://n8n.mypetsafe.com.br/webhook/96a631c4-6d4c-4f97-9d61-d5c9b3cbc039';
+        case "certidao":
+            return "https://n8n.mypetsafe.com.br/webhook/96a631c4-6d4c-4f97-9d61-d5c9b3cbc039";
             break;
-        case 'rg':
-            return 'https://n8n.mypetsafe.com.br/webhook/34ae03c1-d74c-45ac-8bf8-ba6c42b7a637';
+        case "rg":
+            return "https://n8n.mypetsafe.com.br/webhook/34ae03c1-d74c-45ac-8bf8-ba6c42b7a637";
             break;
-        case 'tag':
-            return 'https://n8n.mypetsafe.com.br/webhook/b4699096-6211-423e-b5fe-40262d76e05f';
+        case "tag":
+            return "https://n8n.mypetsafe.com.br/webhook/b4699096-6211-423e-b5fe-40262d76e05f";
             break;
         default:
-            return 'https://n8n.mypetsafe.com.br/webhook/96a631c4-6d4c-4f97-9d61-d5c9b3cbc039';
+            return "https://n8n.mypetsafe.com.br/webhook/96a631c4-6d4c-4f97-9d61-d5c9b3cbc039";
             break;
     }
 }
