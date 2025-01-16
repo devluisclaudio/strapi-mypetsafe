@@ -209,7 +209,8 @@ exports.default = strapi_1.factories.createCoreService("api::pet.pet", ({ strapi
                 });
             }
             else {
-                ["rg", "certidao", "tag"].map(async (item) => {
+                const items = ["rg", "certidao", "tag"];
+                for (const item of items) {
                     const url = urlSwitch(item);
                     const result = await axios_1.default.post(url, pet, {
                         responseType: "stream",
@@ -225,7 +226,7 @@ exports.default = strapi_1.factories.createCoreService("api::pet.pet", ({ strapi
                             cover: await (0, uploadStreamFile_1.default)(info, result),
                         },
                     });
-                });
+                }
             }
             await strapi.entityService.update("api::ordem.ordem", entry[0].id, {
                 data: { credit: false },
