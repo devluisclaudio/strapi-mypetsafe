@@ -205,7 +205,7 @@ export default factories.createCoreService(
           },
         });
 
-        let download = null
+        let download = null;
 
         if (body.type !== "kit") {
           const url = urlSwitch(body.type);
@@ -217,7 +217,7 @@ export default factories.createCoreService(
             name: body.type + "-" + body.petId + ".png",
           };
 
-            download = await strapi.entityService.create(
+          download = await strapi.entityService.create(
             "api::download.download",
             {
               data: {
@@ -229,7 +229,9 @@ export default factories.createCoreService(
             }
           );
         } else {
-          ["rg", "certidao", "tag"].map(async (item) => {
+          const items = ["rg", "certidao", "tag"];
+
+          for (const item of items) {
             const url = urlSwitch(item);
             const result = await axios.post(url, pet, {
               responseType: "stream",
@@ -250,7 +252,7 @@ export default factories.createCoreService(
                 },
               }
             );
-          });
+          }
         }
 
         await strapi.entityService.update("api::ordem.ordem", entry[0].id, {
