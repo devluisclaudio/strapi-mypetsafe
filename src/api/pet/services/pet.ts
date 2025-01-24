@@ -214,7 +214,7 @@ export default factories.createCoreService(
           });
 
           const info = {
-            name: body.type + "-" + body.petId + ".png",
+            name: body.type + "-" + body.petId + entry[0].id + ".png",
           };
 
           download = await strapi.entityService.create(
@@ -238,7 +238,7 @@ export default factories.createCoreService(
             });
 
             const info = {
-              name: item + "-" + body.petId + ".png",
+              name: item + "-" + body.petId + entry[0].id + ".png",
             };
 
             download = await strapi.entityService.create(
