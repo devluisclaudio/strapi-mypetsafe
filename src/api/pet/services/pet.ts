@@ -267,6 +267,30 @@ export default factories.createCoreService(
         return { sucess: false, message: "Créditos insuficiente!" };
       }
     },
+    async updatePet(petId,ctx) {
+        const { body } = ctx.request;
+        const entry = await strapi.entityService.update("api::pet.pet",petId, {
+          data: {
+            name: body.name,
+            especy: body.especy,
+            raca: body.raca,
+            corRg: body.corRg,
+            pataPet: body.pataPet,
+            pelagemOrCor: body.pelagemCor,
+            dateNascimento: body.nascimento,
+            sexo: body.sexo,
+            porte: body.porte,
+            castrado: body.castrado,
+            infoExtra: body.infoExtra
+          },
+        });
+        return entry;
+    },
+
+
+
+
+
     async getCodePet(ctx) {
       const { body } = ctx.request;
       const pet = await strapi.entityService.findMany("api::pet.pet", {
