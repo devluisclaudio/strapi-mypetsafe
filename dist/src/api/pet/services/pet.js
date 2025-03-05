@@ -197,7 +197,7 @@ exports.default = strapi_1.factories.createCoreService("api::pet.pet", ({ strapi
                     responseType: "stream",
                 });
                 const info = {
-                    name: body.type + "-" + body.petId + ".png",
+                    name: body.type + "-" + body.petId + entry[0].id + ".png",
                 };
                 download = await strapi.entityService.create("api::download.download", {
                     data: {
@@ -216,7 +216,7 @@ exports.default = strapi_1.factories.createCoreService("api::pet.pet", ({ strapi
                         responseType: "stream",
                     });
                     const info = {
-                        name: item + "-" + body.petId + ".png",
+                        name: item + "-" + body.petId + entry[0].id + ".png",
                     };
                     download = await strapi.entityService.create("api::download.download", {
                         data: {

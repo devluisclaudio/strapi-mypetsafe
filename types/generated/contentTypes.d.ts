@@ -786,6 +786,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::download.download'
     >;
+    suportes: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::suporte.suporte'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1279,6 +1284,42 @@ export interface ApiPlanoPlano extends Schema.CollectionType {
   };
 }
 
+export interface ApiSuporteSuporte extends Schema.CollectionType {
+  collectionName: 'suportes';
+  info: {
+    singularName: 'suporte';
+    pluralName: 'suportes';
+    displayName: 'Suporte';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    assunto: Attribute.String & Attribute.Required;
+    descricao: Attribute.Text & Attribute.Required;
+    users_permissions_user: Attribute.Relation<
+      'api::suporte.suporte',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::suporte.suporte',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::suporte.suporte',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiTutorTutor extends Schema.CollectionType {
   collectionName: 'tutores';
   info: {
@@ -1349,6 +1390,7 @@ declare module '@strapi/types' {
       'api::ordem.ordem': ApiOrdemOrdem;
       'api::pet.pet': ApiPetPet;
       'api::plano.plano': ApiPlanoPlano;
+      'api::suporte.suporte': ApiSuporteSuporte;
       'api::tutor.tutor': ApiTutorTutor;
     }
   }

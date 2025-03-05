@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "suportes",
+  "info": {
+    "singularName": "suporte",
+    "pluralName": "suportes",
+    "displayName": "Suporte"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "assunto": {
+      "type": "string",
+      "required": true
+    },
+    "descricao": {
+      "type": "text",
+      "required": true
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "suportes"
+    }
+  }
+}

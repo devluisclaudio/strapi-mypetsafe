@@ -83,6 +83,12 @@
             "relation": "oneToMany",
             "target": "api::download.download",
             "mappedBy": "users_permissions_user"
+        },
+        "suportes": {
+            "type": "relation",
+            "relation": "oneToMany",
+            "target": "api::suporte.suporte",
+            "mappedBy": "users_permissions_user"
         }
     }
 }
