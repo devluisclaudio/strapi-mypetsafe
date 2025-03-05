@@ -43,6 +43,11 @@ const myExtraRoutes = [
         path: '/pets/me/getCodePet',
         handler: 'api::pet.pet.getCodePet',
     },
+    {
+        method: 'PUT',
+        path: '/pets/me/update/:id',
+        handler: 'api::pet.pet.updatePet',
+    },
 ];
 
 const allRoutes = customRouter(defaultRouter, myExtraRoutes)
