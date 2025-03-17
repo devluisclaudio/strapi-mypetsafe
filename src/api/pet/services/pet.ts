@@ -273,7 +273,7 @@ export default factories.createCoreService(
         const entry = await strapi.entityService.update("api::pet.pet",petId, {
           data: {
             name: body.name,
-            especy: body.especy,
+            especy: body.especy.id,
             raca: body.raca,
             corRg: body.corRg,
             pataPet: body.pataPet,
