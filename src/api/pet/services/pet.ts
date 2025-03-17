@@ -117,7 +117,6 @@ export default factories.createCoreService(
       return entry;
     },
 
-
     async webhook(ctx) {
       const event = ctx.request.body;
       var body;
@@ -268,29 +267,30 @@ export default factories.createCoreService(
         return { sucess: false, message: "Créditos insuficiente!" };
       }
     },
-    async updatePet(petId,ctx) {
-        const { body } = ctx.request;
-        const entry = await strapi.entityService.update("api::pet.pet",petId, {
-          data: {
-            name: body.name,
-            especy: body.especy,
-            raca: body.raca,
-            corRg: body.corRg,
-            pataPet: body.pataPet,
-            pelagemOrCor: body.pelagemCor,
-            dateNascimento: body.nascimento,
-            sexo: body.sexo,
-            porte: body.porte,
-            castrado: body.castrado,
-            infoExtra: body.infoExtra
+    async updatePet(petId, ctx) {
+      const { body } = ctx.request;
+      const entry = await strapi.entityService.update("api::pet.pet", petId, {
+        data: {
+          name: body.name,
+          especy: body.especy,
+          raca: body.raca,
+          corRg: body.corRg,
+          pataPet: body.pataPet,
+          pelagemOrCor: body.pelagemCor,
+          dateNascimento: body.nascimento,
+          sexo: body.sexo,
+          porte: body.porte,
+          castrado: body.castrado,
+          infoExtra: body.infoExtra,
+        },
+        populate: {
+          especy: {
+            fields: ["id", "name"],
           },
-        });
-        return entry;
+        },
+      });
+      return entry;
     },
-
-
-
-
 
     async getCodePet(ctx) {
       const { body } = ctx.request;
