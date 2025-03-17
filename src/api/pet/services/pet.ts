@@ -283,13 +283,21 @@ export default factories.createCoreService(
           castrado: body.castrado,
           infoExtra: body.infoExtra,
         },
+      });
+
+      const user = ctx.state.user;
+      const pet = await strapi.entityService.findMany("api::pet.pet", {
+        filters: {
+          id: entry.id,
+          users_permissions_user: user.id,
+        },
         populate: {
           especy: {
             fields: ["id", "name"],
           },
         },
       });
-      return entry;
+      return pet;
     },
 
     async getCodePet(ctx) {
