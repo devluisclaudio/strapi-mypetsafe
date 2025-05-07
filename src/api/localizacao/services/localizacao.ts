@@ -29,8 +29,8 @@ export default factories.createCoreService(
         data: {
           ip: body.ip,
           userAgent: body.userAgent,
-          latitude: body.location? body.location.latitude : null,
-          longitude: body.location? body.location.longitude : null,
+          latitude: body.location? String(body.location.latitude) : null,
+          longitude: body.location? String(body.location.longitude) : null,
           pet: pet[0].id,
           users_permissions_user: pet[0].users_permissions_user.id,
         },

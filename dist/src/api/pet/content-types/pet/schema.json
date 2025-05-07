@@ -93,6 +93,12 @@
         "corRg": {
             "type": "string",
             "default": "Verde"
+        },
+        "localizacoes": {
+            "type": "relation",
+            "relation": "oneToMany",
+            "target": "api::localizacao.localizacao",
+            "mappedBy": "pet"
         }
     }
 }

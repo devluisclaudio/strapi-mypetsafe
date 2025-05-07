@@ -32,5 +32,10 @@ exports.default = strapi_1.factories.createCoreController('api::pet.pet', ({ str
     async getCodePet(ctx) {
         const result = await strapi.service('api::pet.pet').getCodePet(ctx);
         return result;
+    },
+    async updatePet(ctx) {
+        const { id } = ctx.params;
+        const result = await strapi.service('api::pet.pet').updatePet(id, ctx);
+        return result;
     }
 }));

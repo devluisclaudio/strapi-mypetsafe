@@ -89,6 +89,12 @@
             "relation": "oneToMany",
             "target": "api::suporte.suporte",
             "mappedBy": "users_permissions_user"
+        },
+        "localizacoes": {
+            "type": "relation",
+            "relation": "oneToMany",
+            "target": "api::localizacao.localizacao",
+            "mappedBy": "users_permissions_user"
         }
     }
 }
