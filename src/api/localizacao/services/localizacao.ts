@@ -18,25 +18,54 @@ export default factories.createCoreService(
           users_permissions_user: {
             fields: ["id", "username", "email"],
           },
-          }
-        })
-
-        if(pet.length == 0){
-          return { sucess: false, message: "Pet não encontrado!" };
-        }
-
-      const entry = await strapi.entityService.create("api::localizacao.localizacao", {
-        data: {
-          ip: body.ip,
-          userAgent: body.userAgent,
-          latitude: body.location? String(body.location.latitude) : null,
-          longitude: body.location? String(body.location.longitude) : null,
-          pet: pet[0].id,
-          users_permissions_user: pet[0].users_permissions_user.id,
         },
       });
 
-      return entry
+      if (pet.length == 0) {
+        return { sucess: false, message: "Pet não encontrado!" };
+      }
+
+      const entry = await strapi.entityService.create(
+        "api::localizacao.localizacao",
+        {
+          data: {
+            ip: body.ip,
+            userAgent: body.userAgent,
+            latitude: body.location ? String(body.location.latitude) : null,
+            longitude: body.location ? String(body.location.longitude) : null,
+            pet: pet[0].id,
+            users_permissions_user: pet[0].users_permissions_user.id,
+          },
+        }
+      );
+
+      return entry;
+    },
+    async find(ctx) {
+      const user = ctx.state.user;
+      let filters: any = {
+        users_permissions_user: user.id,
+      };
+      if (ctx.query.pet) {
+        filters.pet = ctx.query.pet;
+      }
+
+      const localizaoes = await strapi.entityService.findMany(
+        "api::localizacao.localizacao",
+        {
+          filters,
+          populate: {
+            pet: {
+              fields: ["id", "name"],
+            },
+            users_permissions_user: {
+              fields: ["id", "username", "email"],
+            },
+          },
+        }
+      );
+
+      return localizaoes;
     },
   })
 );
