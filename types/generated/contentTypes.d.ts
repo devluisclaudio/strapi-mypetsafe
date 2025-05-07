@@ -1144,7 +1144,7 @@ export interface ApiLocalizacaoLocalizacao extends Schema.CollectionType {
     displayName: 'Localizacoes';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     ip: Attribute.String;
