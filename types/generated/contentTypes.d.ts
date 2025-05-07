@@ -791,6 +791,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::suporte.suporte'
     >;
+    localizacoes: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::localizacao.localizacao'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1131,6 +1136,49 @@ export interface ApiEstadoEstado extends Schema.CollectionType {
   };
 }
 
+export interface ApiLocalizacaoLocalizacao extends Schema.CollectionType {
+  collectionName: 'localizacoes';
+  info: {
+    singularName: 'localizacao';
+    pluralName: 'localizacoes';
+    displayName: 'Localizacoes';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    ip: Attribute.String;
+    userAgent: Attribute.String;
+    latitude: Attribute.String;
+    longitude: Attribute.String;
+    pet: Attribute.Relation<
+      'api::localizacao.localizacao',
+      'manyToOne',
+      'api::pet.pet'
+    >;
+    users_permissions_user: Attribute.Relation<
+      'api::localizacao.localizacao',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::localizacao.localizacao',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::localizacao.localizacao',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiOrdemOrdem extends Schema.CollectionType {
   collectionName: 'ordens';
   info: {
@@ -1238,6 +1286,11 @@ export interface ApiPetPet extends Schema.CollectionType {
     >;
     pataPet: Attribute.String & Attribute.DefaultTo<'Cachorro'>;
     corRg: Attribute.String & Attribute.DefaultTo<'Verde'>;
+    localizacoes: Attribute.Relation<
+      'api::pet.pet',
+      'oneToMany',
+      'api::localizacao.localizacao'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<'api::pet.pet', 'oneToOne', 'admin::user'> &
@@ -1387,6 +1440,7 @@ declare module '@strapi/types' {
       'api::download.download': ApiDownloadDownload;
       'api::especie.especie': ApiEspecieEspecie;
       'api::estado.estado': ApiEstadoEstado;
+      'api::localizacao.localizacao': ApiLocalizacaoLocalizacao;
       'api::ordem.ordem': ApiOrdemOrdem;
       'api::pet.pet': ApiPetPet;
       'api::plano.plano': ApiPlanoPlano;
