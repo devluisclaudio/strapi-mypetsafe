@@ -1,0 +1,39 @@
+{
+  "kind": "collectionType",
+  "collectionName": "localizacoes",
+  "info": {
+    "singularName": "localizacao",
+    "pluralName": "localizacoes",
+    "displayName": "Localizacoes"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "ip": {
+      "type": "string"
+    },
+    "userAgent": {
+      "type": "string"
+    },
+    "latitude": {
+      "type": "string"
+    },
+    "longitude": {
+      "type": "string"
+    },
+    "pet": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::pet.pet",
+      "inversedBy": "localizacoes"
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "localizacoes"
+    }
+  }
+}
